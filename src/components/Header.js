@@ -44,7 +44,7 @@ function Header(props) {
                 >
                   New Product
                 </Link>
-
+              
                 <Link
                   to={"login"}
                   className="whitespace-nowrap cursor-pointer pb-3"
