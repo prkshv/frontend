@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ImageBase64 } from "../utility/Imagebase64";
+// import { loginimage } from ".../assets/signupp.gif";
 
 function Signup(props) {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -12,8 +15,9 @@ function Signup(props) {
     firstName: " ",
     lastName: " ",
     email: " ",
-    password: " ",
-    confirmpassword: " ",
+    password: "",
+    confirmpassword: "",
+    image: "",
   });
 
   const handleShowPassword = () => {
@@ -33,12 +37,24 @@ function Signup(props) {
     });
   };
 
+  const handleProfileImage = async (e) => {
+    const data = await ImageBase64(e.target.files[0]);
+    console.log("Image in text format:", data);
+    setData((preve) => {
+      return {
+        ...preve,
+        image: data,
+      };
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const { firstName, lastName, email, password, confirmpassword } = data;
     if (firstName && lastName && email && password && confirmpassword) {
       if (password === confirmpassword) {
         alert("form submitted");
+        navigate("/login");
       } else {
         alert("password did not match");
       }
@@ -51,13 +67,26 @@ function Signup(props) {
     <div className="p-2 md:p-4">
       <h1 className="text-center text-2xl font-bold">SIGN UP</h1>
       <div className="w-full max-w-sm bg-white m-auto flex items-center flex-col p-4 mt-4">
-        <div className="w-20 overflow-hidden rounded-full drop-shadow-md shadow-md">
+        <div className="w-20 overflow-hidden rounded-full drop-shadow-md shadow-md relative">
           <img
-            src="./assets/signupp.gif"
+            src={data.image ? data.image : "./assets/signupp.gif"}
             alt="User Signup"
             className="w-full"
           />
+          <label htmlFor="profileImage">
+            <div className="absolute bottom-0 h-1/3  bg-slate-500 w-full text-center cursor-pointer">
+              <p className="text-sm text-white">Upload</p>
+            </div>
+            <input
+              type={"file"}
+              id="profileImage"
+              className="hidden"
+              onChange={handleProfileImage}
+              accept="image/*"
+            />
+          </label>
         </div>
+
         <form
           action=""
           className="w-full py-3 flex flex-col"
@@ -92,7 +121,7 @@ function Signup(props) {
           />
 
           <label htmlFor="password">Password</label>
-          <div className="flex px-2 mb-2 py-1 bg-slate-200 rounded outline focus-within:outline-blue-400">
+          <div className="flex px-2 mb-2 py-1 bg-slate-200 rounded outline-none focus-within:outline-blue-400">
             <input
               type={showPassword ? "text" : "password"}
               id="password"
@@ -107,7 +136,7 @@ function Signup(props) {
           </div>
 
           <label htmlFor="confirmpassword">Confirm Password</label>
-          <div className="flex mb-2 px-2 py-1 bg-slate-200 rounded outline focus-within:outline-blue-400">
+          <div className="flex mb-2 px-2 py-1 bg-slate-200 rounded outline-none focus-within:outline-blue-400">
             <input
               type={showConfirmPassword ? "text" : "password"}
               id="confirmpassword"
