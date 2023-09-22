@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import { ImageBase64 } from "../utility/Imagebase64";
-// import { loginimage } from ".../assets/signupp.gif";
+// const loginimage = process.env.PUBLIC_URL + "/assets/signupp.gif";
+import signuppp from "../assets/signupp.gif";
 
 function Signup(props) {
   const navigate = useNavigate();
@@ -48,13 +49,26 @@ function Signup(props) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { firstName, lastName, email, password, confirmpassword } = data;
     if (firstName && lastName && email && password && confirmpassword) {
       if (password === confirmpassword) {
-        alert("form submitted");
-        navigate("/login");
+        // console.log(`${process.env.REACT_APP_SERVICE_DOMIN}signup`);
+        const fetchdata = await fetch(
+          `${process.env.REACT_APP_SERVICE_DOMIN}signup`,
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+        const dataa = await fetchdata.json();
+        console.log(dataa);
+        // alert("form submitted");
+        // navigate("/login");
       } else {
         alert("password did not match");
       }
@@ -67,14 +81,14 @@ function Signup(props) {
     <div className="p-2 md:p-4">
       <h1 className="text-center text-2xl font-bold">SIGN UP</h1>
       <div className="w-full max-w-sm bg-white m-auto flex items-center flex-col p-4 mt-4">
-        <div className="w-20 overflow-hidden rounded-full drop-shadow-md shadow-md relative">
+        <div className="w-20 h-20 overflow-hidden rounded-full drop-shadow-md shadow-md relative">
           <img
-            src={data.image ? data.image : "./assets/signupp.gif"}
+            src={data.image ? data.image : signuppp}
             alt="User Signup"
-            className="w-full"
+            className="w-full h-full"
           />
           <label htmlFor="profileImage">
-            <div className="absolute bottom-0 h-1/3  bg-slate-500 w-full text-center cursor-pointer">
+            <div className="absolute bottom-0 h-1/3 bg-slate-500 bg-opacity-50 w-full text-center cursor-pointer">
               <p className="text-sm text-white">Upload</p>
             </div>
             <input

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { HiOutlineUserCircle } from "react-icons/hi";
+import logo from "../assets/logo512.png";
 
 function Header(props) {
   const [showMenu, setShowMenu] = useState(false);
@@ -14,7 +15,7 @@ function Header(props) {
       <div className="flex items-center h-full justify-between">
         <Link to={""}>
           <div className="h-16">
-            <img className="h-full" src="./assets/logo512.png" alt="logo" />
+            <img className="h-full" src={logo} alt="logo" />
           </div>
         </Link>
 
@@ -44,7 +45,7 @@ function Header(props) {
                 >
                   New Product
                 </Link>
-              
+
                 <Link
                   to={"login"}
                   className="whitespace-nowrap cursor-pointer pb-3"
